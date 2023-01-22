@@ -1,0 +1,111 @@
+i {
+    color: #6c757d;
+}
+
+.vehicle-icon {
+    padding: 10px;
+    font-size: 2rem;
+    max-width: 3.1em;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    box-shadow: inset 0px 0px 2px #b2b2b2;
+}
+
+.vehicle-icon i {
+    color: black;
+}
+
+.no-paid {
+    border-color: #fda7a7;
+    background-color: #FAD2D2;
+}
+
+.paid {
+    border-color: #7ce7b1;
+    background-color: #D2FAE6;
+}
+
+.spinner-card {
+    min-height: 4rem;
+}
+
+.form-select {
+    background-color: #f8f9fa;
+}
+
+.add-deduction-button:hover {
+    background-color: #6610f2;
+}
+
+.add-deduction-button > i {
+    color: white;
+}
+
+td, th {
+    cursor: default;
+}
+
+.payments-table > tr > td {
+    vertical-align: middle;
+    padding: 5px 0px;
+}
+
+.td-success {
+    padding: 10px 0px;
+}
+
+.modal-buttons {
+    padding: 1rem;
+}
+
+button > i {
+    color: white;
+}
+
+.table-responsive {
+    max-height: 200px;
+}
+
+.table-responsive-maintenance {
+    max-height: 400px;
+}
+
+.table-responsive-payments {
+    overflow-y: auto;
+    max-height: 300px;
+}
+
+.table-button-float > button {
+    float: right;
+    margin-right: 50px;
+}
+
+.btn-sm {
+    padding: 2px 8px;
+}
+
+.button-success-color {
+    color: #0d6efd;
+}
+
+.link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.edit-group {
+    padding: 0px;
+}
+
+.margin-icon {
+    margin-right: 1rem;
+}
+
+.observation-table-data {
+    max-width: 250px;
+}
+
+.no-padding tr td, .no-padding tr th {
+    padding: 0px 5px;
+}

@@ -1,0 +1,403 @@
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <select class="form-select mb-3" (change)="changeSelected($event.target)" *ngIf="!vehicleTypeLoading">
+                                <option selected>Vehiculo...</option>
+                                <option *ngFor="let vehicle of vehicles" value="{{ vehicle.license }}">
+                                    {{ vehicle.type + ' - ' +  vehicle.license }}
+                                </option>
+                            </select>
+                            <div class="row">
+                                <div class="col-md-12 text-center spinner-card mt-3" *ngIf="vehicleTypeLoading">
+                                    <i class="fa-solid fa-spinner fa-spin fa-2xl" ></i>
+                                </div>
+                                <div class="col-md-12 text-center spinner-card mt-3" *ngIf="!vehicleTypeLoading && vehicleSelected == null">
+                                    <p>Selecciona un vehiculo</p>
+                                </div>
+                                <div class="col-md-12" *ngIf="!vehicleTypeLoading && vehicleSelected != null">
+                                    <div class="text-center my-4" *ngIf="vehicleDetailLoading">
+                                        <i class="fa-solid fa-spinner fa-spin fa-2xl text-center" ></i>
+                                    </div>
+                                    <ng-container *ngIf="!vehicleDetailLoading">
+                                        <div class="row mt-2" *ngIf="!driver">
+                                            <hr>
+                                                <p class="text-center"> No hay conductor</p>
+                                            <hr>
+                                        </div>
+                                        <div class="row mt-2" *ngIf="driver">
+                                            <div class="col-md-4 text-center">
+                                                <i class="fa-regular fa-address-card fa-2xl"></i>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <p>
+                                                    <a data-bs-toggle="modal" data-bs-target="#driverInfoModal" class="link">
+                                                        {{ driver.name }}
+                                                        <i class="fa-solid fa-circle-info mx-1 button-success-color"></i>
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4 text-center">
+                                                <i class="fa-solid fa-coins fa-2xl"></i>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <p>{{ vehicleSelected.liquidation | copFormat }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4 text-center">
+                                                <i class="fa-solid {{ vehicleSelectedIcon }} fa-2xl"></i>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <p>{{ vehicleSelected.license }} </p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4 text-center">
+                                                <i class="fa-solid fa-xmarks-lines fa-2xl"></i>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <p>{{ vehicleSelected.brand }} </p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4 text-center">
+                                                <i class="fa-solid fa-file-contract fa-2xl"></i>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <p>{{ vehicleSelected.reference }} </p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-4 text-center">
+                                                <i class="fa-solid fa-calendar-xmark fa-2xl"></i>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <p>Miercoles</p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <div class="col-md-12 d-grid gap-2">
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#maintenanceModal">
+                                                    <i class="fa-solid fa-screwdriver-wrench fa-lg margin-icon"></i>
+                                                    Mantenimiento
+                                                </button>
+                                            </div>
+                                            <div class="col-md-12 d-grid gap-2 mt-2">
+                                                <button type="button" class="btn btn-danger">
+                                                    <i class="fa-solid fa-skull-crossbones fa-lg margin-icon"></i>
+                                                    <span>Cerrar Contrato</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-12 card mb-3">
+                    <div class="card-body total text-center">
+                        <table class="table table-bordered">
+                            <tbody class="no-padding">
+                                <tr>
+                                    <th>Pagado:</th>
+                                    <td class="text-end"><span>{{ totalPaid | copFormat }}</span></td>
+                                    <th class="table-danger">Deuda conductor:</th>
+                                    <td class="table-danger text-end"><span>{{ driverDebt | copFormat }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <th>Deducciones:</th>
+                                    <td class="text-end"><span>{{ totalDeductions | copFormat }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <th>Mantenimientos:</th>
+                                    <td class="text-end"><span>{{ totalMaintenances | copFormat }}</span></td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <th>TOTAL: </th>
+                                    <td class="text-end"><span>{{ total | copFormat }}</span></td>
+                                    <th>DEDUCCION TOTAL: </th>
+                                    <td class="text-end"><span>{{ totalAllDeductions | copFormat }}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive-payments">
+                            <table class="table table-bordered text-center">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Fecha Inicio</th>
+                                        <th scope="col">Fecha Fin</th>
+                                        <th scope="col">Deducciones</th>
+                                        <th scope="col">Monto</th>
+                                        <th scope="col">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngIf="!paymentsTableLoading" class="payments-table">
+                                    <tr *ngFor="let payment of payments" [ngClass]="{ 'paid': payment.status, 'no-paid': !payment.status }">
+                                        <td scope="row">{{ payment.startDate }}</td>
+                                        <td>{{ payment.endDate }}</td>
+                                        <td class="table-button-float">
+                                            <span>{{ payment.totalDeductions == undefined || payment.totalDeductions <= 0 ? 0 : payment.totalDeductions | copFormat }}</span>
+                                            <button type="button" class="btn btn-primary btn-sm" (click)="selectedPayment = payment" data-bs-toggle="modal" data-bs-target="#addDeductionModal">
+                                                <i class="fa-regular fa-window-restore"></i>
+                                            </button>
+                                        </td>
+                                        <td>{{ vehicleSelected?.liquidation || 0 | copFormat }}</td>
+                                        <td *ngIf="payment.status" class="td-success">
+                                            <i class="fa-solid fa-check fa-lg"></i>
+                                        </td>
+                                        <td *ngIf="!payment.status">
+                                            <button class="btn btn-success" (click)="payDebt(payment)">
+                                                <i class="fa-solid fa-coins fa-md"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center my-4" *ngIf="paymentsTableLoading">
+                            <i class="fa-solid fa-spinner fa-spin fa-2xl text-center" ></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addDeductionModal" data-bs-backdrop="true" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" #deductionModal>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="deductionsTable">
+                        <button class="nav-link active" id="pills-deductionsTable-tab" data-bs-toggle="pill" data-bs-target="#pills-deductionsTable" type="button" role="tab" aria-controls="pills-deducionsTable" aria-selected="true">
+                            Deducciones
+                        </button>
+                    </li>
+                    <li class="nav-item" role="addDeductionsForm">
+                        <button class="nav-link" id="pills-addDeductionsForm-tab" data-bs-toggle="pill" data-bs-target="#pills-addDeductionForm" type="button" role="tab" aria-controls="pills-addDeductionsForm" aria-selected="false">
+                            Nueva Deducción
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active table-responsive mb-2" id="pills-deductionsTable" role="tabpanel" aria-labelledby="pills-deductions-tab" tabindex="0">
+                        <table class="table text-center table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Costo</th>
+                                    <th scope="col">Observacion</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let deduction of selectedPayment?.deductions; let index = index">
+                                    <td scope="row">{{ index + 1 }}</td>
+                                    <td scope="row">{{ deduction.cost | copFormat }}</td>
+                                    <td scope="row">{{ deduction.observation }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" (click)="removeDeduction(index)">
+                                            <i class="fa-solid fa-spinner fa-spin fa-md" *ngIf="removeDeductionLoading"></i>
+                                            <i class="fa-solid fa-xmark" *ngIf="!removeDeductionLoading"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="pills-addDeductionForm" role="tabpanel" aria-labelledby="pills-addDeductionForm" tabindex="0">
+                        <div class="row">
+                            <hr>
+                            <h3 class="text-center mb-3">Nueva Deduccion</h3>
+                            <form [formGroup]="deductionForm" (ngSubmit)="addNewDeduction()">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label for="cost">Valor: *</label>
+                                        <input type="number" id="cost" class="form-control" [ngClass]="{ 'is-invalid': deductionForm.controls.cost.touched && deductionForm.controls.cost.invalid }" formControlName="cost">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-2">
+                                    <div class="form-group">
+                                        <label for="observation">Observacion: *</label>
+                                        <textarea id="observation" class="form-control" [ngClass]="{ 'is-invalid': deductionForm.controls.observation.touched && deductionForm.controls.observation.invalid }" formControlName="observation"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mt-3 form-group d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary" [disabled]="deductionForm.invalid || addDeductionLoading">
+                                        <i class="fa-solid fa-spinner fa-spin fa-xl" *ngIf="addDeductionLoading"></i>
+                                        <span *ngIf="!addDeductionLoading">Guardar</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-2 form-group d-grid gap-2">
+                    <button type="button" #closeDeductionModalButton class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="driverInfoModal" data-bs-backdrop="true" data-bs-keyboard="false" tabindex="-1" aria-labelledby="driverInfoModal" aria-hidden="true" #driverInfoModal>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <h1 class="text-center">{{ driver?.name }}</h1>
+                    <hr>
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th class="align-middle">Cédula: </th>
+                                <td>
+                                    {{ driver?.id }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="align-middle">Celular: </th>
+                                <td>
+                                    {{ driver?.phone }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="align-middle">Dirección: </th>
+                                <td>
+                                    {{ driver?.address }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="align-middle">Email: </th>
+                                <td>
+                                    {{ driver?.email ? driver?.email : '-'   }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 mt-2 form-group d-grid gap-2">
+                    <button type="button" #closeDriverInfoModal class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal modal-xl fade" id="maintenanceModal" data-bs-backdrop="true" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" #maintenanceModal>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="maintenanceTable">
+                        <button class="nav-link active" id="pills-maintenanceTable-tab" data-bs-toggle="pill" data-bs-target="#pills-maintenanceTable" type="button" role="tab" aria-controls="pills-maintenanceTable" aria-selected="true">
+                            Mantenimientos
+                        </button>
+                    </li>
+                    <li class="nav-item" role="addMaintenanceForm">
+                        <button class="nav-link" id="pills-addMaintenanceForm-tab" data-bs-toggle="pill" data-bs-target="#pills-addMaintenanceForm" type="button" role="tab" aria-controls="pills-addMaintenanceForm" aria-selected="false">
+                            Nuevo Mantenimiento
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active table-responsive-maintenance mb-2" id="pills-maintenanceTable" role="tabpanel" aria-labelledby="pills-maintenance-tab" tabindex="0">
+                        <table class="table text-center table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Tipo</th>
+                                    <th scope="col">KM</th>
+                                    <th scope="col">Costo</th>
+                                    <th scope="col">Observacion</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let maintenance of maintenances; let index = index">
+                                    <td scope="row">{{ index + 1 }}</td>
+                                    <td scope="row">{{ maintenance.date }}</td>
+                                    <td scope="row">{{ maintenance.type }}</td>
+                                    <td scope="row">{{ maintenance.km | number }} km</td>
+                                    <td scope="row">{{ maintenance.cost | copFormat }}</td>
+                                    <td scope="row" class="observation-table-data">{{ maintenance.observation }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" (click)="removeMaintenance(maintenance.id)" [disabled]="removeMaintenanceLoading">
+                                            <i class="fa-solid fa-spinner fa-spin fa-md" *ngIf="removeMaintenanceLoading"></i>
+                                            <i class="fa-solid fa-xmark" *ngIf="!removeMaintenanceLoading"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="pills-addMaintenanceForm" role="tabpanel" aria-labelledby="pills-maintenance-tab" tabindex="0">
+                        <hr>
+                        <h3 class="text-center mb-3">Nuevo Mantenimiento</h3>
+                        <form class="row" [formGroup]="maintenanceForm" (ngSubmit)="addNewMaintenance()">
+                            <div class="col-md-6 mt-2">
+                                <div class="form-group">
+                                    <label for="date">Fecha: *</label>
+                                    <input type="date" id="date" class="form-control" [ngClass]="{ 'is-invalid': maintenanceForm.controls.date.touched && maintenanceForm.controls.date.invalid }" formControlName="date">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="form-group">
+                                    <label for="type">Tipo: *</label>
+                                    <input type="text" id="type" class="form-control" [ngClass]="{ 'is-invalid': maintenanceForm.controls.type.touched && maintenanceForm.controls.type.invalid }" formControlName="type">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="form-group">
+                                    <label for="km">Kilometraje: *</label>
+                                    <input type="number" id="km" class="form-control" [ngClass]="{ 'is-invalid': maintenanceForm.controls.km.touched && maintenanceForm.controls.km.invalid }" formControlName="km">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="form-group">
+                                    <label for="cost">Costo: *</label>
+                                    <input type="number" id="cost" class="form-control" [ngClass]="{ 'is-invalid': maintenanceForm.controls.cost.touched && maintenanceForm.controls.cost.invalid }" formControlName="cost">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <div class="form-group">
+                                    <label for="observation">Observacion:</label>
+                                    <textarea id="observation" class="form-control" [ngClass]="{ 'is-invalid': maintenanceForm.controls.observation.touched && maintenanceForm.controls.observation.invalid }" formControlName="observation"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-3 form-group d-grid gap-2">
+                                <button type="submit" class="btn btn-primary" [disabled]="maintenanceForm.invalid || addMaintenanceLoading">
+                                    <i class="fa-solid fa-spinner fa-spin fa-xl" *ngIf="addMaintenanceLoading"></i>
+                                    <span *ngIf="!addMaintenanceLoading">Guardar</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-12 mt-2 form-group d-grid gap-2">
+                    <button type="button" #closeMaintenanceModalButton class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

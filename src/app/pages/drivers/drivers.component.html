@@ -1,0 +1,95 @@
+<button class="btn btn-danger back-button align-middle">
+    <i class="fa-solid fa-arrow-left fa-xl"></i>
+</button>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h3 class="text-center">Conductores</h3>
+                </div>
+                <form [formGroup]="driverForm" (ngSubmit)="addNewDriver()">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="id">Cedula: *</label>
+                                    <input type="number" id="id" class="form-control" [ngClass]="{ 'is-invalid': driverForm.controls.id.touched && driverForm.controls.id.invalid }" formControlName="id">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="phone">Celular: *</label>
+                                    <input type="number" id="phone" class="form-control" [ngClass]="{ 'is-invalid': driverForm.controls.phone.touched && driverForm.controls.phone.invalid }" formControlName="phone">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <div class="form-group">
+                                    <label for="name">Nombre: *</label>
+                                    <input type="text" id="name" class="form-control" [ngClass]="{ 'is-invalid': driverForm.controls.name.touched && driverForm.controls.name.invalid }" formControlName="name">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <div class="form-group">
+                                    <label for="email">Email: *</label>
+                                    <input type="email" id="email" class="form-control" [ngClass]="{ 'is-invalid': driverForm.controls.email.touched && driverForm.controls.email.invalid }" formControlName="email">
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-2">
+                                <div class="form-group">
+                                    <label for="address">Direccion: *</label>
+                                    <input type="text" id="address" class="form-control" [ngClass]="{ 'is-invalid': driverForm.controls.address.touched && driverForm.controls.address.invalid }" formControlName="address">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="col-md-12 mt-2 form-group d-grid gap-2">
+                            <button type="submit" class="btn btn-primary" [disabled]="driverForm.invalid">
+                                <i class="fa-solid fa-spinner fa-spin fa-xl" *ngIf="addDriverLoading"></i>
+                                <span *ngIf="!addDriverLoading">
+                                    <i class="fa-regular fa-floppy-disk fa-lg margin-icon"></i>
+                                    Guardar
+                                </span>
+                            </button>
+                        </div>
+                        <div class="col-md-12 mt-2 form-group d-grid gap-2">
+                            <button type="button" class="btn btn-danger" (click)="cleanDriverForm()">
+                                <i class="fa-solid fa-xmark fa-lg margin-icon"></i>
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card mt-2">
+                <div class="card-body">
+                    <table class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cédula</th>
+                                <th>Nombre</th>
+                                <th>Celular</th>
+                                <th>Direccion</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let driver of drivers; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ driver.id }}</td>
+                                <td>{{ driver.name }}</td>
+                                <td>{{ driver.phone }}</td>
+                                <td>{{ driver.address }}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

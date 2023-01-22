@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "vehiclemngr": {
+      "hosting": {
+        "vehicle-mngr": [
+          "vehiclemngr"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "vehiclemngr"
+  }
+}
